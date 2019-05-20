@@ -17,10 +17,9 @@ namespace CalculatorUITestFramework
     /// </summary>
     public class ApplicationBase
     {
-        // Note: append /wd/hub to the URL if you're directing the test at Appium
-        private const string windowsApplicationDriverUrl = "http://127.0.0.1:4723";
         private const string calculatorAppId = "Microsoft.WindowsCalculator.Dev_8wekyb3d8bbwe!App";
         private static Process winAppDriverProcess;
+        private static WindowsDriverLocalService winAppDriverService;
         public static NavigationMenu NavigationMenu = new NavigationMenu();
         public static WindowsDriver<WindowsElement> CalculatorSession { get; private set; }
         public static WindowsElement Header
@@ -55,10 +54,12 @@ namespace CalculatorUITestFramework
         public static void ApplicationSetup(TestContext context)
         {
             // Launches the WinAppDriver.exe in a new Process.
-            winAppDriverProcess = new Process();
-            winAppDriverProcess.StartInfo.FileName = @"c:\Program Files (x86)\Windows Application Driver\winappdriver.exe";
-            winAppDriverProcess.Start();
-            winAppDriverProcess.WaitForExit();
+            winAppDriverService = new WindowsDriverServiceBuilder().Build();
+
+            if (!winAppDriverService.IsRunning)
+            {
+                winAppDriverService.Start();
+            }
 
             // Launch Calculator application if it is not yet launched
             if (CalculatorSession == null)
@@ -68,7 +69,7 @@ namespace CalculatorUITestFramework
                 var options = new AppiumOptions();
                 options.AddAdditionalCapability("app", calculatorAppId);
                 options.AddAdditionalCapability("deviceName", "WindowsPC");
-                CalculatorSession = new WindowsDriver<WindowsElement>(new Uri(windowsApplicationDriverUrl), options);
+                CalculatorSession = new WindowsDriver<WindowsElement>(winAppDriverService.ServiceUrl, options);
                 CalculatorSession.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
                 Assert.IsNotNull(CalculatorSession);
             }
@@ -80,6 +81,9 @@ namespace CalculatorUITestFramework
             if (CalculatorSession != null)
             {
                 CalculatorSession.Quit();
+
+                //CloseApp and Dispose
+
                 CalculatorSession = null;
             }
 
