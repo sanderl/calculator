@@ -11,11 +11,11 @@ namespace CalculatorUITestFramework
 {
     public class WindowsDriverLocalService : IDisposable
     {
-        private readonly FileInfo FileName;
-        private readonly string Arguments;
-        private readonly IPAddress IP;
-        private readonly int Port;
-        private readonly TimeSpan InitializationTimeout;
+        private FileInfo FileName;
+        private string Arguments;
+        private IPAddress IP;
+        private int Port;
+        private TimeSpan InitializationTimeout;
         private Process Service;
 
         public event DataReceivedEventHandler OutputDataReceived;
@@ -28,8 +28,8 @@ namespace CalculatorUITestFramework
             TimeSpan initializationTimeout)
         {
             FileName = fileName;
-            IP = ip;
             Arguments = arguments;
+            IP = ip;
             Port = port;
             InitializationTimeout = initializationTimeout;
         }

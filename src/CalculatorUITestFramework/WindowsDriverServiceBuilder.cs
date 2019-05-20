@@ -13,7 +13,7 @@ namespace CalculatorUITestFramework
 {
     public class WindowsDriverServiceBuilder
     {
-        private string IpAddress = "http://127.0.0.1";
+        private string IpAddress = "127.0.0.1";
         private int Port = 4723;
         private TimeSpan StartUpTimeout = new TimeSpan(0, 2, 0);
         private FileInfo FileInfo;
@@ -24,7 +24,7 @@ namespace CalculatorUITestFramework
             {
                 FileInfo = new FileInfo(@"c:\Program Files (x86)\Windows Application Driver\winappdriver.exe");
             }
-            return new WindowsDriverLocalService(FileInfo, "", IPAddress.Parse(this.IpAddress), this.Port, StartUpTimeout);
+            return new WindowsDriverLocalService(FileInfo, string.Empty, IPAddress.Parse(this.IpAddress), this.Port, StartUpTimeout);
         }
 
         public WindowsDriverServiceBuilder WithFileInfo(FileInfo fileInfo)
