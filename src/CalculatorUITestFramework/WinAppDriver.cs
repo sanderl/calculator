@@ -37,18 +37,18 @@ namespace CalculatorUITestFramework
 
         public void SetupCalculatorSession(TestContext context)
         {
-            windowsDriverService = new WindowsDriverServiceBuilder().Build();
+            this.windowsDriverService = new WindowsDriverServiceBuilder().Build();
 
-            windowsDriverService.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
+            this.windowsDriverService.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
             {
                 var outputData = e.Data?.Replace("\0", string.Empty);
                 if (!String.IsNullOrEmpty(outputData))
                 {
-                    Console.WriteLine(outputData);
+                    context.WriteLine(outputData);
                 }
             });
 
-            windowsDriverService.Start();
+            this.windowsDriverService.Start();
 
             // Launch Calculator application if it is not yet launched
             if (this.CalculatorSession == null)
